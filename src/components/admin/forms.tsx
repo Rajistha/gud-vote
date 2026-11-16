@@ -57,7 +57,7 @@ export function CandidateForm({ c, nextNumber, locked }: { c?: CandidateValues; 
 
 type SettingsValues = {
   title: string; opens_at: string; closes_at: string; eligible_total: number | null; show_live_breakdown: boolean;
-  allow_blank: boolean; public_live: boolean; require_venue_code: boolean; has_venue_code: boolean; require_device_guard: boolean;
+  allow_blank: boolean; public_live: boolean; require_venue_code: boolean; has_venue_code: boolean; venue_code: string | null; require_device_guard: boolean;
 };
 
 export function SettingsForm({ v, locked }: { v: SettingsValues; locked: boolean }) {
@@ -78,8 +78,8 @@ export function SettingsForm({ v, locked }: { v: SettingsValues; locked: boolean
         <label className="toggle"><input type="checkbox" name="allow_blank" defaultChecked={v.allow_blank} /><span><b>Sediakan kotak kosong</b><small>Aktifkan hanya bila diatur AD/ART.</small></span></label>
         <label className="toggle"><input type="checkbox" name="require_venue_code" defaultChecked={v.require_venue_code} /><span><b>Wajib kode lokasi (opsional)</b><small>Pemilih memasukkan kode yang hanya terlihat di lokasi.</small></span></label>
         <div className="field" style={{ marginTop: 10 }}>
-          <label htmlFor="venue_code">{v.has_venue_code ? "Ganti kode lokasi (kosongkan bila tidak diubah)" : "Kode lokasi"}</label>
-          <input id="venue_code" name="venue_code" className="input" autoComplete="off" placeholder="mis. GUD2027" />
+          <label htmlFor="venue_code">Kode lokasi</label>
+          <input key={v.venue_code ?? ""} id="venue_code" name="venue_code" className="input" autoComplete="off" defaultValue={v.venue_code ?? ""} placeholder={v.has_venue_code && !v.venue_code ? "Kode sudah diatur. Isi untuk menggantinya." : "mis. GUD2027"} />
         </div>
         <label className="toggle"><input type="checkbox" name="require_device_guard" defaultChecked={v.require_device_guard} /><span><b>Satu suara per perangkat (opsional)</b><small>Penghalang ringan, bukan pengganti verifikasi panitia.</small></span></label>
         <ErrorLine r={state} />

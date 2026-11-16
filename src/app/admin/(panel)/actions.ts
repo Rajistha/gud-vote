@@ -112,6 +112,16 @@ export async function saveSettings(_prev: Result, fd: FormData): Promise<Result>
   if (!opens || !closes) return { error: "Waktu buka dan tutup wajib diisi." };
   if (closes <= opens) return { error: "Waktu tutup harus setelah waktu buka." };
 
+  // Formulir hanya menampilkan sampai menit: bila tidak diubah, pertahankan nilai asli (beserta detiknya).
+  const sameMinute = (a: Date | null, b: Date) => !!a && Math.floor(a.getTime() / 60_000) === Math.floor(b.getTime() / 60_000);
+  const opensAt = sameMinute(cur.opens_at, opens) ? cur.opens_at! : opens;
+  const closesChanged = !sameMinute(cur.closes_at, closes);
+  const closesAt = closesChanged ? closes : cur.closes_at!;
+  // Mencegah voting tertutup tanpa sengaja oleh formulir yang sudah usang (mis. setelah "Buka kembali").
+  if (closesChanged && closes <= new Date() && phaseOf(cur) !== "closed") {
+    return { error: "Waktu tutup sudah lewat dari sekarang. Muat ulang halaman, atau gunakan Tutup darurat untuk menutup voting." };
+  }
+
   const eligibleRaw = text(fd, "eligible_total");
   const eligible = eligibleRaw ? Number(eligibleRaw) : null;
   if (eligible !== null && (!Number.isInteger(eligible) || eligible < 0)) return { error: "Jumlah anggota harus bilangan bulat." };
@@ -119,23 +129,25 @@ export async function saveSettings(_prev: Result, fd: FormData): Promise<Result>
   const requireVenue = fd.get("require_venue_code") === "on";
   const newCode = text(fd, "venue_code");
   let venueHash = cur.venue_code_hash;
+  let venueCode = cur.venue_code;
   if (newCode) {
     if (newCode.length < 4) return { error: "Kode lokasi minimal 4 karakter." };
     venueHash = hashVenueCode(newCode);
+    venueCode = newCode;
   }
   if (requireVenue && !venueHash) return { error: "Isi kode lokasi bila fitur ini diaktifkan." };
 
   await query(
     `UPDATE election_settings SET title=$1, opens_at=$2, closes_at=$3, eligible_total=$4,
             show_live_breakdown=$5, allow_blank=$6, require_venue_code=$7, venue_code_hash=$8,
-            require_device_guard=$9, public_live=$10, updated_at=now() WHERE id=1`,
-    [title, opens, closes, eligible, fd.get("show_live_breakdown") === "on", fd.get("allow_blank") === "on",
-      requireVenue, venueHash, fd.get("require_device_guard") === "on", fd.get("public_live") === "on"],
+            require_device_guard=$9, public_live=$10, venue_code=$11, updated_at=now() WHERE id=1`,
+    [title, opensAt, closesAt, eligible, fd.get("show_live_breakdown") === "on", fd.get("allow_blank") === "on",
+      requireVenue, venueHash, fd.get("require_device_guard") === "on", fd.get("public_live") === "on", venueCode],
   );
   resetLiveCache();
   await audit(admin.id, "UPDATE_SETTINGS", {
-    opens_at: opens.toISOString(), closes_at: closes.toISOString(), eligible_total: eligible,
-    venue_code_changed: !!newCode,
+    opens_at: opensAt.toISOString(), closes_at: closesAt.toISOString(), eligible_total: eligible,
+    venue_code_changed: !!newCode && newCode !== cur.venue_code,
   });
   revalidatePath("/admin", "layout");
   return { ok: "Pengaturan disimpan." };

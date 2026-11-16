@@ -27,6 +27,7 @@ export default async function Jadwal() {
       </div>
       <div className="g2" style={{ "--cols": "1.2fr 1fr", alignItems: "start" } as React.CSSProperties}>
         <SettingsForm
+          key={`${s.opens_at?.getTime()}|${s.closes_at?.getTime()}|${s.venue_code ?? ""}`}
           locked={!!s.reconciled_at}
           v={{
             title: s.title,
@@ -38,6 +39,7 @@ export default async function Jadwal() {
             public_live: s.public_live,
             require_venue_code: s.require_venue_code,
             has_venue_code: !!s.venue_code_hash,
+            venue_code: s.venue_code,
             require_device_guard: s.require_device_guard,
           }}
         />

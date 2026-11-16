@@ -70,6 +70,8 @@ CREATE TABLE IF NOT EXISTS election_settings (
 -- Untuk database yang dibuat sebelum kolom ini ada
 ALTER TABLE election_settings ADD COLUMN IF NOT EXISTS allow_blank boolean NOT NULL DEFAULT false;
 ALTER TABLE election_settings ADD COLUMN IF NOT EXISTS public_live boolean NOT NULL DEFAULT false;
+-- Kode lokasi disimpan apa adanya agar panitia bisa melihatnya lagi; pemeriksaan pemilih memakai venue_code_hash.
+ALTER TABLE election_settings ADD COLUMN IF NOT EXISTS venue_code text;
 ALTER TABLE election_settings DROP COLUMN IF EXISTS signer_chair;
 ALTER TABLE election_settings DROP COLUMN IF EXISTS signer_president;
 

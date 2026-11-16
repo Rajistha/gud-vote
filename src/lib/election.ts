@@ -13,6 +13,7 @@ export type Settings = {
   show_live_breakdown: boolean;
   require_venue_code: boolean;
   venue_code_hash: string | null;
+  venue_code: string | null;
   require_device_guard: boolean;
   allow_blank: boolean;
   public_live: boolean;
@@ -44,6 +45,7 @@ const DEFAULT_SETTINGS: Settings = {
   show_live_breakdown: true,
   require_venue_code: false,
   venue_code_hash: null,
+  venue_code: null,
   require_device_guard: false,
   allow_blank: false,
   public_live: false,
