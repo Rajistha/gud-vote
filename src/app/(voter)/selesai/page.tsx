@@ -5,17 +5,12 @@ import { getSettings } from "@/lib/election";
 import { fmtDate, fmtTime } from "@/lib/format";
 import { DONE_COOKIE } from "@/lib/voter";
 import { AutoReturn } from "@/components/voter/Clock";
+import { Confetti } from "@/components/voter/Confetti";
 import { resetBooth } from "../actions";
 
 export const dynamic = "force-dynamic";
 
 const TICKER = Array.from({ length: 6 }, () => "Rooted In Care, Equality Everywhere ✱").join(" ");
-
-/** Konfeti dekoratif: posisi tetap agar hasil render server dan klien sama. */
-const COLORS = ["#ffd84a", "#00a0a8", "#ff6fae", "#fff6ef", "#f58a5c"];
-const CONFETTI = Array.from({ length: 16 }, (_, i) => ({
-  k: i % 3, x: (i * 37 + 8) % 96, d: ((i * 7) % 9) / 3, s: 5 + ((i * 5) % 6), c: COLORS[i % COLORS.length],
-}));
 
 export default async function Selesai() {
   // Layar ini hanya untuk yang baru saja memilih.
@@ -27,11 +22,7 @@ export default async function Selesai() {
   return (
     <div className="app">
     <div className="okscr">
-      <div className="ok-confetti" aria-hidden="true">
-        {CONFETTI.map((c, i) => (
-          <i key={i} className={`cf cf-${c.k}`} style={{ "--x": `${c.x}%`, "--d": `${c.d}s`, "--s": `${c.s}s`, "--c": c.c } as React.CSSProperties} />
-        ))}
-      </div>
+      <Confetti />
       <div className="ok-body">
         <div className="ok-head">
           <div className="ok-logo"><Image src="/logo-gud.png" alt="Logo Girl Up Diponegoro" width={52} height={62} priority /></div>

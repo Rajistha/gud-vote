@@ -6,6 +6,7 @@ import { paslonTheme, toLines, youtubeId } from "@/lib/voter";
 import { Photo } from "@/components/Photo";
 import { IconShield } from "@/components/icons";
 import { CountdownCard, TimeLeft } from "./Clock";
+import { Confetti } from "./Confetti";
 
 const pad = (n: number) => String(n).padStart(2, "0");
 
@@ -29,6 +30,7 @@ export function Hero({ s, phase }: { s: Settings; phase: Phase }) {
   const now = new Date().toISOString();
   return (
     <section className="lp-hero">
+      <Confetti />
       <div className="lp-wrap lp-hero-in">
         <div className="lp-hero-l">
           <h1 className="d">Regenerasi <span className="mk">Girl Up Diponegoro 2027</span></h1>
