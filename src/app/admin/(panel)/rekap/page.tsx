@@ -45,7 +45,7 @@ export default async function Rekap() {
         </div>
       )}
 
-      <div className="g2" style={{ gridTemplateColumns: "1.4fr 1fr", alignItems: "start" }}>
+      <div className="g2" style={{ "--cols": "1.4fr 1fr", alignItems: "start" } as React.CSSProperties}>
         <div className="panel" style={{ padding: 8 }}>
           <table className="tbl">
             <thead><tr><th>No.</th><th>Pasangan calon</th><th style={{ textAlign: "right" }}>Suara</th><th style={{ textAlign: "right" }}>%</th></tr></thead>

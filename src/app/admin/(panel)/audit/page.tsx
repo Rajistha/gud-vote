@@ -59,7 +59,7 @@ export default async function Audit() {
     <>
       <div className="main-h"><h1 className="d lc">audit <span className="mk">log</span></h1><div className="sp" /><span className="chip chip-soon">hanya dibaca · 200 terakhir</span></div>
       <div className="panel" style={{ padding: 8, overflowX: "auto" }}>
-        <table className="tbl">
+        <table className="tbl stack">
           <thead><tr><th>Waktu</th><th>Panitia</th><th>Aktivitas</th><th>Keterangan</th></tr></thead>
           <tbody>
             {rows.map((r, i) => (

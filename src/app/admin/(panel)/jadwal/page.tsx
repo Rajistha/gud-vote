@@ -25,7 +25,7 @@ export default async function Jadwal() {
           ))}
         </div>
       </div>
-      <div className="g2" style={{ gridTemplateColumns: "1.2fr 1fr", alignItems: "start" }}>
+      <div className="g2" style={{ "--cols": "1.2fr 1fr", alignItems: "start" } as React.CSSProperties}>
         <SettingsForm
           locked={!!s.reconciled_at}
           v={{

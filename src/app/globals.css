@@ -335,7 +335,8 @@ textarea.input { align-items: flex-start; min-height: 96px; resize: vertical; }
 .kpi.hl small, .kpi.hl span { color: rgba(255, 255, 255, 0.92); }
 .meter { height: 10px; border-radius: 8px; background: #fff; border: 1.5px solid var(--ink); overflow: hidden; margin-top: 8px; }
 .meter i { display: block; height: 100%; background: var(--yellow); border-right: 1.5px solid var(--ink); }
-.g2 { display: grid; grid-template-columns: 1.35fr 1fr; gap: 16px; }
+.g2 { display: grid; grid-template-columns: var(--cols, 1.35fr 1fr); gap: 16px; }
+.navs { display: flex; flex-direction: column; gap: 4px; }
 .panel { background: #fff; border: var(--bd); border-radius: 14px; box-shadow: var(--hs); padding: 20px; min-width: 0; }
 .panel-h { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; flex-wrap: wrap; }
 .panel-h b { font-family: var(--font-d); font-weight: 800; font-size: 20px; letter-spacing: -0.02em; }
@@ -412,13 +413,42 @@ textarea.input { align-items: flex-start; min-height: 96px; resize: vertical; }
 
 @media (max-width: 960px) {
   .adm { grid-template-columns: 1fr; }
-  .side { position: static; height: auto; flex-direction: row; flex-wrap: wrap; align-items: center; gap: 6px; }
-  .side .brand { padding: 0 8px 0 0; }
-  .side .me { margin: 0 0 0 auto; }
-  .kpis { grid-template-columns: repeat(2, 1fr); }
+  .side { position: static; height: auto; display: grid; grid-template-columns: minmax(0, 1fr) auto; grid-template-areas: "brand me" "nav nav"; gap: 10px 12px; align-items: center; padding: 12px 16px 8px; border-right: 0; border-bottom: var(--bd); }
+  .side .brand { grid-area: brand; padding: 0; }
+  .side .me { grid-area: me; margin: 0; flex-direction: row; align-items: center; padding: 0; border: 0; box-shadow: none; background: none; gap: 10px; }
+  .side .me .btn { width: auto; }
+  .navs { grid-area: nav; flex-direction: row; gap: 6px; overflow-x: auto; padding: 2px 4px 8px; margin: 0 -4px; scrollbar-width: none; overscroll-behavior-x: contain; }
+  .navs::-webkit-scrollbar { display: none; }
+  .side a.nav { flex: none; white-space: nowrap; padding: 8px 12px; }
+  .kpis { grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); }
   .g2 { grid-template-columns: 1fr; }
   .hb { grid-template-columns: 1fr 1fr 60px; }
   .main { padding: 18px 16px 32px; }
+}
+@media (max-width: 640px) {
+  .side .me-id { display: none; }
+  .main { padding: 16px 14px 32px; gap: 16px; }
+  .main-h h1 { font-size: 30px; }
+  .kpis { gap: 12px; grid-template-columns: repeat(2, 1fr); }
+  .kpis > :first-child { grid-column: 1 / -1; }
+  .kpi { padding: 14px; }
+  .kpi b { font-size: 34px; }
+  .panel { padding: 16px; }
+  .formgrid { grid-template-columns: 1fr; }
+  .hb { grid-template-columns: minmax(0, 1fr) auto; grid-template-areas: "who val" "track track"; gap: 8px 12px; }
+  .hb .who { grid-area: who; }
+  .hb .val { grid-area: val; }
+  .hb .track { grid-area: track; }
+  .hb .who b { font-size: 14px; }
+  .recon { grid-template-columns: 1fr; }
+  .win { flex-direction: column; align-items: flex-start; gap: 14px; padding: 18px; }
+  .win h2 { font-size: 28px; }
+  .tbl.stack thead { display: none; }
+  .tbl.stack, .tbl.stack tbody { display: block; }
+  .tbl.stack tr { display: flex; flex-wrap: wrap; align-items: center; gap: 2px 12px; padding: 12px 8px; border-bottom: 1.5px dashed #d9c9c2; }
+  .tbl.stack tr:last-child { border-bottom: 0; }
+  .tbl.stack td { padding: 0; border: 0; }
+  .tbl.stack td.mono, .tbl.stack td:first-child { font-size: 12px; }
 }
 
 @media print {
@@ -1205,4 +1235,11 @@ html:has(.lv), body:has(.lv) { height: 100%; overflow: hidden; }
 }
 @media (max-width: 560px) and (max-height: 700px) {
   .lv-rows[data-dense="false"] .lv-name { -webkit-line-clamp: 2; }
+}
+
+/* ================= ADMIN: HP & TABLET (menimpa aturan sidebar di atas) ================= */
+@media (max-width: 960px) {
+  .adm { grid-template-rows: auto 1fr; align-content: start; }
+  .side .me { padding: 0; border: 0; box-shadow: none; background: none; flex-direction: row; align-items: center; gap: 10px; }
+  .side .me .btn { width: auto; }
 }

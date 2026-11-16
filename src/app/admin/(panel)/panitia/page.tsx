@@ -25,9 +25,9 @@ export default async function Panitia(props: PageProps<"/admin/panitia">) {
     <>
       {flash && <FlashToast key={String(sp.msg)} kind={flash[0]} message={flash[1]} />}
       <div className="main-h"><h1 className="d lc">panitia <span className="mk">&amp; akses</span></h1></div>
-      <div className="g2" style={{ gridTemplateColumns: "1.3fr 1fr", alignItems: "start" }}>
+      <div className="g2" style={{ "--cols": "1.3fr 1fr", alignItems: "start" } as React.CSSProperties}>
         <div className="panel" style={{ padding: 8 }}>
-          <table className="tbl">
+          <table className="tbl stack">
             <thead><tr><th>Nama</th><th>Email</th><th /></tr></thead>
             <tbody>
               {admins.map((a) => (
