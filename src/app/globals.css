@@ -307,7 +307,8 @@ textarea.input { align-items: flex-start; min-height: 96px; resize: vertical; }
   animation: slam 0.6s 0.2s cubic-bezier(0.2, 1.4, 0.4, 1) both;
 }
 .stamp b { font-size: 27px; letter-spacing: -0.01em; }
-.stamp small { font-family: var(--mono); font-size: 10px; font-weight: 500; margin-top: 6px; letter-spacing: 0.04em; }
+.stamp small { display: flex; flex-direction: column; align-items: center; gap: 1px; font-family: var(--mono); font-size: 11px; line-height: 1.2; font-weight: 500; margin-top: 7px; letter-spacing: 0.04em; white-space: nowrap; }
+.stamp small span:last-child { font-size: 0.85em; letter-spacing: 0.18em; }
 @keyframes slam { from { transform: rotate(-30deg) scale(2.4); opacity: 0; } to { transform: rotate(-12deg) scale(1); opacity: 1; } }
 .okscr .note { background: #fff; border: var(--bd); box-shadow: var(--hs); border-radius: 12px; padding: 12px 14px; font-size: 13px; position: relative; margin: 0; }
 .okscr .note.n1 { border-left: 8px solid var(--teal); }
@@ -1339,9 +1340,9 @@ html:has(.lv), body:has(.lv) { height: 100%; overflow: hidden; }
   .ok-head { gap: 8px; }
   .ok-logo img { width: 34px; }
   .okscr h1 { font-size: clamp(2.4rem, min(13vw, 9vh), 3.6rem); }
-  .okscr .stamp { width: 104px; height: 104px; box-shadow: var(--hs); }
+  .okscr .stamp { width: 112px; height: 112px; box-shadow: var(--hs); outline-offset: -8px; }
   .okscr .stamp b { font-size: 16px; }
-  .okscr .stamp small { font-size: 8px; }
+  .okscr .stamp small { font-size: 9.5px; margin-top: 4px; letter-spacing: 0.02em; }
   .ok-notes { gap: 8px; }
   .okscr .note { padding: 8px 12px; font-size: 12px; }
   .okscr .note b { font-size: 15px; }

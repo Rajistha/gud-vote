@@ -28,7 +28,7 @@ export default async function Selesai() {
           <div className="ok-logo"><Image src="/logo-gud.png" alt="Logo Girl Up Diponegoro" width={52} height={62} priority /></div>
           <span className="chip ok-chip">Thank you GUDies!</span>
           <h1 className="d">Suara <span className="mk">Tersimpan</span></h1>
-          <div className="stamp" aria-hidden="true"><b>SUDAH<br />MEMILIH</b><small>{stampDate} · GUD</small></div>
+          <div className="stamp" aria-hidden="true"><b>SUDAH<br />MEMILIH</b><small><span>{stampDate}</span><span>GUD</span></small></div>
         </div>
         <div className="ok-notes">
           <div className="note n1"><b>Pilihan Anda rahasia</b>Suara Anda tidak terhubung dengan identitas Anda.</div>
