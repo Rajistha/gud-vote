@@ -39,3 +39,40 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# ---------------------------------------------------------------
+# Dokumen perencanaan & file terkait AI -- jangan di-upload ke GitHub
+# ---------------------------------------------------------------
+/docs
+# semua file Markdown (PRD, ERD, catatan, instruksi AI) kecuali README
+*.md
+!README.md
+AGENTS.md
+CLAUDE.md
+GEMINI.md
+.gemini
+.codex
+.agents
+.kiro
+.roo
+.clinerules
+.superpowers
+.cline*
+.claude
+.cursor
+.cursorrules
+.windsurf
+.windsurfrules
+.aider*
+.github/copilot-instructions.md
+.continue
+.codeium
+.vscode/mcp.json
+.mcp.json
+
+# database lokal (PGlite) & env
+/.pglite/
+!.env.example
+
+# unggahan foto lokal (fallback tanpa Supabase Storage)
+/public/uploads/

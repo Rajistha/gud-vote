@@ -1,0 +1,75 @@
+"use server";
+
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
+import { query } from "@/lib/db";
+import { getSettings, phaseOf } from "@/lib/election";
+import { hashDevice, hashVenueCode, newDeviceToken, rateLimit, safeEqual } from "@/lib/security";
+import { DEVICE_COOKIE, DONE_COOKIE, VENUE_COOKIE, clientIp, venueOk } from "@/lib/voter";
+
+export type FormState = { error?: string } | undefined;
+
+const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
+export async function enterVenueCode(_prev: FormState, formData: FormData): Promise<FormState> {
+  const ip = await clientIp();
+  if (!rateLimit(`venue:${ip}`, 10, 60_000)) return { error: "Terlalu banyak percobaan. Silakan coba beberapa saat lagi." };
+
+  const s = await getSettings();
+  const code = String(formData.get("code") ?? "");
+  if (!s.venue_code_hash || !safeEqual(hashVenueCode(code), s.venue_code_hash)) {
+    return { error: "Kode tidak sesuai. Silakan hubungi panitia di lokasi." };
+  }
+  (await cookies()).set(VENUE_COOKIE, s.venue_code_hash, {
+    httpOnly: true, sameSite: "lax", secure: process.env.NODE_ENV === "production", path: "/", maxAge: 60 * 60 * 8,
+  });
+  redirect("/bilik");
+}
+
+export async function castVote(_prev: FormState, formData: FormData): Promise<FormState> {
+  const ip = await clientIp();
+  if (!rateLimit(`vote:${ip}`, 30, 60_000)) return { error: "Terlalu banyak percobaan. Silakan coba beberapa saat lagi." };
+
+  const s = await getSettings();
+  if (phaseOf(s) !== "open") redirect("/bilik");
+  if (!(await venueOk(s))) redirect("/bilik");
+
+  const choice = String(formData.get("choice") ?? "");
+  const blank = choice === "blank";
+  if (!blank && !UUID.test(choice)) return { error: "Silakan pilih satu pasangan calon." };
+
+  const jar = await cookies();
+  let deviceToken = jar.get(DEVICE_COOKIE)?.value ?? null;
+  let deviceHash: string | null = null;
+  if (s.require_device_guard) {
+    deviceToken ??= newDeviceToken();
+    deviceHash = hashDevice(deviceToken);
+  }
+
+  let failure: string | null = null;
+  try {
+    await query("SELECT cast_vote($1, $2, $3)", [blank ? null : choice, blank, deviceHash]);
+  } catch (e) {
+    failure = e instanceof Error ? e.message : "";
+  }
+
+  if (failure) {
+    if (failure.includes("VOTING_NOT_OPEN")) redirect("/bilik");
+    if (failure.includes("ALREADY_VOTED_ON_DEVICE")) redirect("/bilik");
+    if (failure.includes("BLANK_NOT_ALLOWED")) return { error: "Kotak kosong tidak tersedia." };
+    if (failure.includes("INVALID_CANDIDATE")) return { error: "Pasangan calon tidak ditemukan. Silakan muat ulang halaman." };
+    console.error("cast_vote gagal:", failure);
+    return { error: "Suara belum terkirim. Silakan coba lagi atau hubungi panitia." };
+  }
+
+  const cookieOpts = { httpOnly: true, sameSite: "lax", secure: process.env.NODE_ENV === "production", path: "/" } as const;
+  if (deviceHash && deviceToken) jar.set(DEVICE_COOKIE, deviceToken, { ...cookieOpts, maxAge: 60 * 60 * 24 * 30 });
+  jar.delete(VENUE_COOKIE);
+  jar.set(DONE_COOKIE, "1", { ...cookieOpts, maxAge: 300 });
+  redirect("/selesai");
+}
+
+/** Dipanggil saat layar "suara tercatat" kembali ke awal untuk pemilih berikutnya. */
+export async function resetBooth() {
+  (await cookies()).delete(DONE_COOKIE);
+}
