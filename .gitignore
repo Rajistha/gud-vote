@@ -72,6 +72,7 @@ GEMINI.md
 
 # database lokal (PGlite) & env
 /.pglite/
+/.pglite-*/
 !.env.example
 
 # unggahan foto lokal (fallback tanpa Supabase Storage)

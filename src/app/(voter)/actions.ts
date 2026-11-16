@@ -4,7 +4,7 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { query } from "@/lib/db";
 import { getSettings, phaseOf } from "@/lib/election";
-import { hashDevice, hashVenueCode, newDeviceToken, rateLimit, safeEqual } from "@/lib/security";
+import { hashDevice, hashVenueCode, newDeviceToken, rateLimit, rateLimitHit, rateLimitOpen, safeEqual } from "@/lib/security";
 import { DEVICE_COOKIE, DONE_COOKIE, VENUE_COOKIE, clientIp, venueOk } from "@/lib/voter";
 
 export type FormState = { error?: string } | undefined;
@@ -13,11 +13,13 @@ const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 export async function enterVenueCode(_prev: FormState, formData: FormData): Promise<FormState> {
   const ip = await clientIp();
-  if (!rateLimit(`venue:${ip}`, 10, 60_000)) return { error: "Terlalu banyak percobaan. Silakan coba beberapa saat lagi." };
+  // Yang dibatasi hanya kode yang salah: puluhan pemilih di satu Wi-Fi lokasi (satu IP) tetap bisa masuk bersamaan.
+  if (!rateLimitOpen(`venue-fail:${ip}`, 10)) return { error: "Terlalu banyak percobaan. Silakan coba beberapa saat lagi." };
 
   const s = await getSettings();
   const code = String(formData.get("code") ?? "");
   if (!s.venue_code_hash || !safeEqual(hashVenueCode(code), s.venue_code_hash)) {
+    rateLimitHit(`venue-fail:${ip}`, 60_000);
     return { error: "Kode tidak sesuai. Silakan hubungi panitia di lokasi." };
   }
   (await cookies()).set(VENUE_COOKIE, s.venue_code_hash, {
@@ -28,7 +30,8 @@ export async function enterVenueCode(_prev: FormState, formData: FormData): Prom
 
 export async function castVote(_prev: FormState, formData: FormData): Promise<FormState> {
   const ip = await clientIp();
-  if (!rateLimit(`vote:${ip}`, 30, 60_000)) return { error: "Terlalu banyak percobaan. Silakan coba beberapa saat lagi." };
+  // Banyak pemilih berbagi satu IP di lokasi, jadi batasnya longgar; pengaman utamanya adalah jadwal dan satu-perangkat-satu-suara.
+  if (!rateLimit(`vote:${ip}`, 600, 60_000)) return { error: "Terlalu banyak percobaan. Silakan coba beberapa saat lagi." };
 
   const s = await getSettings();
   if (phaseOf(s) !== "open") redirect("/e-vote");

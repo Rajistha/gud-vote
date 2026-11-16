@@ -12,7 +12,10 @@ export const dynamic = "force-dynamic";
 
 const MSG: Record<string, ["success" | "error", string]> = {
   saved: ["success", "Data paslon disimpan."],
-  deleted: ["success", "Paslon dihapus."],
+  deleted: ["success", "Paslon telah dihapus."],
+  deleted_with_photo: ["success", "Paslon dan fotonya telah dihapus."],
+  saved_photo: ["error", "Data disimpan, tetapi foto lama gagal dihapus dari penyimpanan. Hapus manual di Storage."],
+  deleted_photo: ["error", "Paslon dihapus, tetapi foto gagal dihapus dari penyimpanan. Hapus manual di Storage."],
   locked: ["error", "Paslon tidak bisa dihapus saat voting berlangsung."],
   hasvotes: ["error", "Paslon ini sudah punya suara, tidak bisa dihapus."],
 };

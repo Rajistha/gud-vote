@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useActionState, useTransition } from "react";
 import {
-  addAdmin, emergencyClose, extendTime, reconcile, reopenVoting, saveCandidate, saveSettings, type Result,
+  emergencyClose, extendTime, reconcile, reopenVoting, unlockResults, saveCandidate, saveSettings, type Result,
 } from "@/app/admin/(panel)/actions";
 import { ConfirmSubmit } from "@/components/ui/ConfirmDialog";
 import { DateTimePicker } from "@/components/ui/DateTimePicker";
@@ -157,6 +157,23 @@ export function EmergencyPanel({ locked, phase }: { locked: boolean; phase: "upc
   );
 }
 
+export function UnlockForm() {
+  const [state, action, pending] = useActionState<Result, FormData>(unlockResults, undefined);
+  useResultToast(state);
+  return (
+    <form action={action} noValidate style={{ marginTop: 12 }}>
+      <ErrorLine r={state} />
+      <ConfirmSubmit
+        className="btn btn-g btn-sm btn-block"
+        title="Buka kunci hasil?"
+        description="Hasil tidak lagi berstatus final dan ekspor dinonaktifkan sampai hasil dikunci kembali. Jadwal dan pembukaan kembali voting dapat digunakan lagi."
+        confirmLabel="Ya, buka kunci"
+        disabled={pending}
+      >{pending ? "Membuka…" : "Buka kunci"}</ConfirmSubmit>
+    </form>
+  );
+}
+
 export function ReconcileForm() {
   const [state, action, pending] = useActionState<Result, FormData>(reconcile, undefined);
   useResultToast(state);
@@ -177,26 +194,6 @@ export function ReconcileForm() {
           disabled={pending}
         >{pending ? "Mengunci…" : "Kunci hasil"}</ConfirmSubmit>
       </div>
-    </form>
-  );
-}
-
-export function AddAdminForm() {
-  const [state, action, pending] = useActionState<Result, FormData>(addAdmin, undefined);
-  useResultToast(state);
-  return (
-    <form action={action} className="panel" noValidate>
-      <div className="panel-h"><b>Tambah panitia</b></div>
-      <div className="formgrid">
-        <div className="field"><label htmlFor="email">Email panitia</label><input id="email" name="email" type="email" className="input" placeholder="nama@email.com" /></div>
-        <div className="field"><label htmlFor="name">Nama</label><input id="name" name="name" className="input" /></div>
-        <div className="field full">
-          <label htmlFor="password">Password awal (opsional) <InfoTip text="Isi untuk membuat akun login baru. Kosongkan bila panitia sudah memiliki akun." /></label>
-          <input id="password" name="password" type="password" minLength={8} autoComplete="new-password" className="input" placeholder="Kosongkan bila akun sudah ada" />
-        </div>
-      </div>
-      <ErrorLine r={state} />
-      <button className="btn btn-p btn-sm" style={{ marginTop: 14 }} disabled={pending}>{pending ? "Menyimpan…" : "Tambah"}</button>
     </form>
   );
 }

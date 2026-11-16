@@ -34,6 +34,20 @@ const buckets = new Map<string, { n: number; reset: number }>();
 
 let lastSweep = 0;
 
+/** Apakah kunci ini masih boleh mencoba? Tidak menambah hitungan (dipakai bersama rateLimitHit). */
+export function rateLimitOpen(key: string, max: number): boolean {
+  const b = buckets.get(key);
+  return !b || Date.now() > b.reset || b.n < max;
+}
+
+/** Mencatat satu percobaan gagal. */
+export function rateLimitHit(key: string, windowMs: number): void {
+  const now = Date.now();
+  const b = buckets.get(key);
+  if (!b || now > b.reset) buckets.set(key, { n: 1, reset: now + windowMs });
+  else b.n += 1;
+}
+
 export function rateLimit(key: string, max: number, windowMs: number): boolean {
   const now = Date.now();
   // Bersihkan catatan kedaluwarsa secara berkala agar memori tidak terus bertambah.

@@ -57,19 +57,31 @@ export async function uploadCandidatePhoto(file: File): Promise<Result> {
   return { url: `/uploads/${name}` };
 }
 
-/** Menghapus foto lama (jika milik kita). Kegagalan diabaikan: foto yatim tidak merusak apa pun. */
-export async function removeCandidatePhoto(url: string | null | undefined): Promise<void> {
-  if (!url) return;
+/**
+ * Menghapus foto dari penyimpanan. Mengembalikan false bila foto gagal dihapus
+ * (dicatat di log) agar pemanggil bisa memberi tahu panitia, bukan diam-diam menyisakan berkas.
+ */
+export async function removeCandidatePhoto(url: string | null | undefined): Promise<boolean> {
+  if (!url) return true;
   try {
     if (url.startsWith("/uploads/")) {
-      await unlink(path.join(process.cwd(), "public", "uploads", path.basename(url)));
-      return;
+      await unlink(path.join(process.cwd(), "public", "uploads", path.basename(url))).catch((e: NodeJS.ErrnoException) => {
+        if (e.code !== "ENOENT") throw e;
+      });
+      return true;
     }
     const marker = `/${BUCKET}/`;
     const i = url.indexOf(marker);
     const client = supa();
-    if (client && i >= 0) await client.storage.from(BUCKET).remove([url.slice(i + marker.length).split("?")[0]]);
-  } catch {
-    /* abaikan */
+    if (!client || i < 0) return true; // bukan foto di penyimpanan kita
+    const { error } = await client.storage.from(BUCKET).remove([url.slice(i + marker.length).split("?")[0]]);
+    if (error) {
+      console.error("Hapus foto gagal:", error.message);
+      return false;
+    }
+    return true;
+  } catch (e) {
+    console.error("Hapus foto gagal:", e instanceof Error ? e.message : e);
+    return false;
   }
 }

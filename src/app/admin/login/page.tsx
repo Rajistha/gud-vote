@@ -4,19 +4,27 @@ import { query } from "@/lib/db";
 import { getAdmin } from "@/lib/session";
 import { LoginForm } from "@/components/admin/LoginForm";
 import { Select } from "@/components/ui/Select";
+import { FlashToast } from "@/components/ui/Toast";
 import { devLogin } from "./actions";
 
 export const dynamic = "force-dynamic";
 export const metadata = { title: "Masuk panitia · GUD Vote" };
 
-export default async function AdminLogin() {
+const MSG: Record<string, ["success" | "error", string]> = {
+  out: ["success", "Anda telah keluar."],
+};
+
+export default async function AdminLogin(props: PageProps<"/admin/login">) {
   if (await getAdmin()) redirect("/admin");
+  const sp = await props.searchParams;
+  const flash = typeof sp.msg === "string" ? MSG[sp.msg] : undefined;
 
   const dev = process.env.NODE_ENV !== "production" && process.env.DEV_ADMIN_LOGIN === "1";
   const admins = dev ? await query<{ id: string; email: string }>("SELECT id, email FROM admins ORDER BY email") : [];
 
   return (
     <main style={{ padding: "0 16px" }}>
+      {flash && <FlashToast key={String(sp.msg)} kind={flash[0]} message={flash[1]} />}
       <div className="login-card">
         <Image src="/logo-gud.png" alt="Logo Girl Up Diponegoro" width={84} height={100} />
         <h1 className="d" style={{ fontSize: 44, margin: "18px 0 8px" }}>Panel <span className="mk">Panitia</span></h1>

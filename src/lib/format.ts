@@ -6,6 +6,11 @@ export function fmtDate(d: Date | string): string {
   }).format(new Date(d));
 }
 
+/** Tanggal tanpa nama hari, untuk surat resmi: "16 November 2026". */
+export function fmtDateLong(d: Date | string): string {
+  return new Intl.DateTimeFormat("id-ID", { day: "numeric", month: "long", year: "numeric", timeZone: TZ }).format(new Date(d));
+}
+
 export function fmtTime(d: Date | string): string {
   return (
     new Intl.DateTimeFormat("id-ID", {

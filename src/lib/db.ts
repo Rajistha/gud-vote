@@ -13,7 +13,10 @@ export const pool =
     connectionString: isLocal ? url : url.replace(/([?&])sslmode=[^&]*&?/, "$1").replace(/[?&]$/, ""),
     // Bila DATABASE_CA (sertifikat CA dalam format PEM) diisi, identitas server diverifikasi penuh.
     ssl: isLocal ? undefined : process.env.DATABASE_CA ? { ca: process.env.DATABASE_CA, rejectUnauthorized: true } : { rejectUnauthorized: false },
-    max: Number(process.env.DB_POOL_MAX ?? 5),
+    // Di Vercel setiap instance fungsi memegang pool sendiri: jaga kecil agar total koneksi tetap aman.
+    max: Number(process.env.DB_POOL_MAX ?? (process.env.VERCEL ? 2 : 5)),
+    idleTimeoutMillis: 10_000,
+    connectionTimeoutMillis: 8_000,
   });
 
 // Tanpa handler ini, koneksi idle yang terputus bisa menjatuhkan seluruh proses Node.

@@ -12,12 +12,11 @@ export default async function PanelLayout({ children }: { children: React.ReactN
   const admin = await requireAdmin();
 
   const items: NavItem[] = [
-    { href: "/admin", label: "Dashboard", icon: "chart" },
-    { href: "/admin/paslon", label: "Paslon", icon: "users" },
-    { href: "/admin/jadwal", label: "Jadwal", icon: "cal" },
-    { href: "/admin/rekap", label: "Rekap & Ekspor", icon: "file" },
-    { href: "/admin/panitia", label: "Panitia", icon: "users" },
-    { href: "/admin/audit", label: "Audit Log", icon: "log" },
+    { href: "/admin", label: "Dashboard", short: "Beranda", icon: "chart" },
+    { href: "/admin/paslon", label: "Paslon", short: "Paslon", icon: "vote" },
+    { href: "/admin/jadwal", label: "Jadwal", short: "Jadwal", icon: "cal" },
+    { href: "/admin/rekap", label: "Rekap & Ekspor", short: "Rekap", icon: "file" },
+    { href: "/admin/audit", label: "Audit Log", short: "Audit", icon: "log" },
   ];
 
   return (

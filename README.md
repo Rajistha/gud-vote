@@ -14,7 +14,7 @@ dicocokkan dengan jumlah pemilih yang hadir. Panitia mengelola pemilihan lewat p
 | | |
 |---|---|
 | **Rahasia** | Tabel suara hanya menyimpan ID paslon, tanpa identitas dan tanpa waktu. |
-| **Satu peran** | Seluruh panitia memiliki akses penuh, dibatasi oleh daftar panitia di database. |
+| **Satu peran** | Seluruh panitia memiliki akses penuh, dibatasi oleh tabel `admins` di database. |
 | **Real-time** | Halaman hitung suara publik diperbarui otomatis dan siap ditampilkan di layar besar. |
 | **Responsif** | Pemilih, landing page, dan panel admin nyaman dipakai dari HP sampai layar lebar. |
 
@@ -38,7 +38,6 @@ dicocokkan dengan jumlah pemilih yang hadir. Panitia mengelola pemilihan lewat p
 | Jadwal | Waktu buka dan tutup, kotak kosong, kode lokasi, buka kembali, perpanjang, tutup darurat |
 | Rekap | Hasil suara dan ekspor ke Excel |
 | Berita acara | Pencocokan jumlah suara dengan kehadiran, lalu hasil dikunci |
-| Panitia | Daftar akun panitia |
 | Audit | Riwayat seluruh tindakan admin |
 
 ## Mulai cepat
@@ -69,6 +68,7 @@ Tanpa Supabase, panel admin di `/admin/login` bisa dimasuki lewat tombol **Masuk
 | `npm run db:seed:demo` | Seed beserta data contoh (hanya database lokal) |
 | `npm run db:reset:demo` | Mengosongkan suara dan log (hanya database lokal) |
 | `npm run db:copy-local` | Menyalin data paslon dari database lokal ke online |
+| `npm run storage:clean` | Menampilkan foto di storage yang tidak dipakai paslon (`--delete` untuk menghapus) |
 | `npm run security:check` | Simulasi penyerang read-only terhadap database online |
 
 ## Menghubungkan Supabase
@@ -88,8 +88,9 @@ Selama `DATABASE_URL` masih `127.0.0.1`, data tersimpan di komputer sendiri.
 
 1. `SUPABASE_URL` dan `SUPABASE_ANON_KEY`: **Project Settings** > **API Keys**.
 2. Buat akun di **Authentication** > **Users** > **Add user** (centang *Auto Confirm User*).
-3. Isi `SUPABASE_SERVICE_ROLE_KEY` untuk unggah foto dan membuat akun panitia dari halaman Panitia.
-4. Nonaktifkan **Allow new users to sign up** di **Authentication** > **Sign In / Providers**.
+3. Isi `SUPABASE_SERVICE_ROLE_KEY` untuk unggah foto paslon.
+4. Daftarkan email panitia di `ADMIN_EMAILS`, lalu jalankan `npm run db:seed`. Email yang tidak terdaftar di tabel `admins` tidak dapat masuk panel.
+5. Nonaktifkan **Allow new users to sign up** di **Authentication** > **Sign In / Providers**.
 
 ## Foto paslon
 
@@ -117,3 +118,10 @@ Tanpa kunci itu, foto lokal disimpan di `public/uploads/` hanya saat pengembanga
 ## Variabel lingkungan
 
 Lihat [.env.example](.env.example) untuk daftar lengkap beserta penjelasannya.
+
+## Deploy ke Vercel
+
+1. Impor repositori di Vercel. Wilayah fungsi sudah diatur ke Singapura (`vercel.json`) agar dekat dengan Supabase.
+2. Isi Environment Variables: `DATABASE_URL` (Transaction pooler, port 6543), `SESSION_SECRET`, `SUPABASE_URL`, `SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY`, `NEXT_PUBLIC_SITE_HOST`, dan `DB_POOL_MAX=2`. Jangan isi `DEV_ADMIN_LOGIN`.
+3. Sebelum hari-H: pastikan project Supabase aktif (paket Free menjeda project yang tidak dipakai seminggu), jalankan `npm run db:check`, dan coba satu kali alur lengkap di domain produksi.
+4. Tampilkan `/live` di satu layar saja (proyektor), bukan di banyak ponsel, untuk menghemat kuota.

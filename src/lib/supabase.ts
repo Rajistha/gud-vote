@@ -17,20 +17,3 @@ export async function verifyPassword(email: string, password: string): Promise<{
   if (error || !data.user?.email) return null;
   return { email: data.user.email.toLowerCase() };
 }
-
-export function canCreateUsers(): boolean {
-  return !!process.env.SUPABASE_URL && !!process.env.SUPABASE_SERVICE_ROLE_KEY;
-}
-
-/** Membuat akun Supabase untuk panitia. Butuh SUPABASE_SERVICE_ROLE_KEY. */
-export async function createSupabaseUser(email: string, password: string): Promise<{ ok: true; existed: boolean } | { ok: false; error: string }> {
-  const url = process.env.SUPABASE_URL;
-  const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
-  if (!url || !key) return { ok: false, error: "Pembuatan akun otomatis belum tersedia. Buat akun login panitia secara terpisah." };
-
-  const { error } = await createClient(url, key, opts).auth.admin.createUser({ email, password, email_confirm: true });
-  if (!error) return { ok: true, existed: false };
-  if (/already|registered|exists/i.test(error.message)) return { ok: true, existed: true };
-  console.error("Pembuatan akun gagal:", error.message);
-  return { ok: false, error: "Akun login gagal dibuat. Periksa kembali email dan password." };
-}

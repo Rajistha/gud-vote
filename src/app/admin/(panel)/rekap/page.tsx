@@ -3,7 +3,7 @@ import { getSettings, getStats, phaseOf } from "@/lib/election";
 import { fmtDateTime, pct } from "@/lib/format";
 import { requireAdmin } from "@/lib/session";
 import { paslonTheme } from "@/lib/voter";
-import { ReconcileForm } from "@/components/admin/forms";
+import { ReconcileForm, UnlockForm } from "@/components/admin/forms";
 import { IconDownload } from "@/components/icons";
 
 export const dynamic = "force-dynamic";
@@ -73,7 +73,10 @@ export default async function Rekap() {
               <div><small>total suara masuk</small><b>{st.votes}</b></div>
             </div>
             {locked ? (
+              <>
               <p className="muted" style={{ fontSize: 13, margin: 0 }}>Dikunci {fmtDateTime(s.reconciled_at!)}.{s.reconciliation_note ? ` Catatan: ${s.reconciliation_note}` : ""}</p>
+              <UnlockForm />
+              </>
             ) : (
               <ReconcileForm />
             )}
@@ -86,11 +89,13 @@ export default async function Rekap() {
               {locked ? (
                 <>
                   <Link href="/admin/rekap/berita-acara" className="btn btn-g btn-sm"><IconDownload />Berita acara (cetak / PDF)</Link>
+                  <a href="/api/admin/berita-acara.docx" className="btn btn-g btn-sm"><IconDownload />Berita acara (Word)</a>
                   <a href="/api/admin/rekap.xlsx" className="btn btn-g btn-sm"><IconDownload />Rekap data (Excel)</a>
                 </>
               ) : (
                 <>
                   <span className="btn btn-sm btn-dis">Berita acara (cetak / PDF)</span>
+                  <span className="btn btn-sm btn-dis">Berita acara (Word)</span>
                   <span className="btn btn-sm btn-dis">Rekap data (Excel)</span>
                 </>
               )}

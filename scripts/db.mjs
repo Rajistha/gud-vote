@@ -158,7 +158,7 @@ async function seedDemo() {
     for (const d of demo) {
       await pool.query(
         `INSERT INTO candidates (number, president_name, vice_name, president_info, vice_info, vision, mission, programs)
-         VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9)`,
+         VALUES ($1,$2,$3,$4,$5,$6,$7,$8)`,
         d,
       );
     }

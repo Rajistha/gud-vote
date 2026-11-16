@@ -9,7 +9,6 @@ import { hashVenueCode } from "@/lib/security";
 import { resetLiveCache } from "@/lib/live";
 import { removeCandidatePhoto, uploadCandidatePhoto } from "@/lib/storage";
 import { audit, destroySession, requireAdmin } from "@/lib/session";
-import { createSupabaseUser } from "@/lib/supabase";
 
 const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 export type Result = { ok?: string; error?: string } | undefined;
@@ -17,7 +16,7 @@ export type Result = { ok?: string; error?: string } | undefined;
 /* ---------- sesi ---------- */
 export async function logout() {
   await destroySession();
-  redirect("/admin/login");
+  redirect("/admin/login?msg=out");
 }
 
 /* ---------- paslon ---------- */
@@ -77,9 +76,9 @@ export async function saveCandidate(_prev: Result, fd: FormData): Promise<Result
     if (e instanceof Error && e.message.includes("candidates_number_key")) return { error: `Nomor urut ${number} sudah dipakai paslon lain.` };
     throw e;
   }
-  if (existing?.photo_url && existing.photo_url !== photo) await removeCandidatePhoto(existing.photo_url);
+  const oldGone = existing?.photo_url && existing.photo_url !== photo ? await removeCandidatePhoto(existing.photo_url) : true;
   revalidatePath("/admin/paslon");
-  redirect("/admin/paslon?msg=saved");
+  redirect(oldGone ? "/admin/paslon?msg=saved" : "/admin/paslon?msg=saved_photo");
 }
 
 export async function deleteCandidate(id: string): Promise<void> {
@@ -90,12 +89,14 @@ export async function deleteCandidate(id: string): Promise<void> {
   const used = await queryOne<{ n: string }>("SELECT COUNT(*) AS n FROM votes WHERE candidate_id = $1", [id]);
   if (Number(used?.n ?? 0) > 0) redirect("/admin/paslon?msg=hasvotes");
   const c = await queryOne<{ number: number; photo_url: string | null }>("DELETE FROM candidates WHERE id = $1 RETURNING number, photo_url", [id]);
+  let photoGone = true;
+  const hadPhoto = !!c?.photo_url;
   if (c) {
-    await audit(admin.id, "DELETE_CANDIDATE", { number: c.number });
-    await removeCandidatePhoto(c.photo_url);
+    photoGone = await removeCandidatePhoto(c.photo_url);
+    await audit(admin.id, "DELETE_CANDIDATE", { number: c.number, photo_removed: photoGone });
   }
   revalidatePath("/admin/paslon");
-  redirect("/admin/paslon?msg=deleted");
+  redirect(!photoGone ? "/admin/paslon?msg=deleted_photo" : hadPhoto ? "/admin/paslon?msg=deleted_with_photo" : "/admin/paslon?msg=deleted");
 }
 
 /* ---------- jadwal & pengaturan ---------- */
@@ -148,6 +149,17 @@ export async function setPublicLive(on: boolean): Promise<Result & { on?: boolea
   await audit(admin.id, "PUBLIC_LIVE", { on: !!on });
   revalidatePath("/admin", "layout");
   return { ok: on ? "Live count ditampilkan ke publik." : "Live count disembunyikan dari publik.", on: !!on };
+}
+
+/** Membuka kembali hasil yang sudah dikunci (voting tetap ditutup; jadwal dan pembukaan kembali bisa dipakai lagi). */
+export async function unlockResults(): Promise<Result> {
+  const admin = await requireAdmin();
+  const s = await getSettings(true);
+  if (!s.reconciled_at) return { error: "Hasil belum dikunci." };
+  await query("UPDATE election_settings SET reconciled_at=NULL, reconciliation_note=NULL, updated_at=now() WHERE id=1");
+  await audit(admin.id, "UNLOCK_RESULT", {});
+  revalidatePath("/admin", "layout");
+  return { ok: "Kunci hasil dibuka. Hasil perlu dikunci kembali sebelum diekspor." };
 }
 
 export async function extendTime(minutes: number): Promise<Result> {
@@ -211,45 +223,4 @@ export async function reconcile(_prev: Result, fd: FormData): Promise<Result> {
   await audit(admin.id, "RECONCILE", { votes: st.votes, note });
   revalidatePath("/admin", "layout");
   return { ok: "Hasil dikunci. Berita acara dan Excel siap diekspor." };
-}
-
-/* ---------- panitia ---------- */
-export async function addAdmin(_prev: Result, fd: FormData): Promise<Result> {
-  const admin = await requireAdmin();
-  const email = text(fd, "email").toLowerCase();
-  const name = opt(fd, "name");
-  if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) return { error: "Format email tidak valid." };
-  const exists = await queryOne("SELECT 1 FROM admins WHERE lower(email) = $1", [email]);
-  if (exists) return { error: "Email ini sudah terdaftar sebagai panitia." };
-
-  // Password diisi = buat juga akun Supabase-nya (butuh SUPABASE_SERVICE_ROLE_KEY).
-  const password = String(fd.get("password") ?? "");
-  let note = "Buat akun login panitia secara terpisah agar dapat masuk.";
-  if (password) {
-    if (password.length < 8) return { error: "Password minimal 8 karakter." };
-    const r = await createSupabaseUser(email, password);
-    if (!r.ok) return { error: r.error };
-    note = r.existed ? "Akun login sudah ada; password tidak diubah." : "Akun login dibuat.";
-  }
-
-  await query("INSERT INTO admins (email, name) VALUES ($1,$2)", [email, name]);
-  await audit(admin.id, "ADD_ADMIN", { email, supabase_user: !!password });
-  revalidatePath("/admin/panitia");
-  return { ok: `${email} ditambahkan sebagai panitia. ${note}` };
-}
-
-export async function removeAdmin(id: string): Promise<void> {
-  const admin = await requireAdmin();
-  if (!UUID_RE.test(id)) redirect("/admin/panitia");
-  if (id === admin.id) redirect("/admin/panitia?msg=self");
-  // audit_logs (dan check_ins lama) merujuk ke admin; yang sudah punya jejak tidak boleh dihapus.
-  const used = await queryOne<{ n: string }>(
-    `SELECT (SELECT COUNT(*) FROM audit_logs WHERE admin_id = $1) + (SELECT COUNT(*) FROM check_ins WHERE admin_id = $1) AS n`,
-    [id],
-  );
-  if (Number(used?.n ?? 0) > 0) redirect("/admin/panitia?msg=hasdata");
-  const r = await queryOne<{ email: string }>("DELETE FROM admins WHERE id = $1 RETURNING email", [id]);
-  if (r) await audit(admin.id, "REMOVE_ADMIN", { email: r.email });
-  revalidatePath("/admin/panitia");
-  redirect("/admin/panitia?msg=removed");
 }

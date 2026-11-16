@@ -15,13 +15,15 @@ const LABEL: Record<string, string> = {
   REOPEN: "Membuka kembali voting",
   EMERGENCY_CLOSE: "Tutup darurat",
   RECONCILE: "Mengunci hasil",
+  UNLOCK_RESULT: "Membuka kunci hasil",
   EXPORT: "Ekspor laporan",
   ADD_ADMIN: "Menambah panitia",
+  UPDATE_SIGNERS: "Mengubah penandatangan",
   REMOVE_ADMIN: "Menghapus panitia",
 };
 
 /** Aksi yang perlu perhatian lebih. */
-const WARN = new Set(["VIEW_LIVE_COUNT", "EMERGENCY_CLOSE", "EXTEND_TIME", "REOPEN", "RECONCILE"]);
+const WARN = new Set(["VIEW_LIVE_COUNT", "EMERGENCY_CLOSE", "EXTEND_TIME", "REOPEN", "RECONCILE", "UNLOCK_RESULT"]);
 
 function describe(action: string, d: Record<string, unknown> | null): string {
   const g = (k: string) => d?.[k];
