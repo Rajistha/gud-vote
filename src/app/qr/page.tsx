@@ -14,7 +14,7 @@ const SITE_HOST = process.env.NEXT_PUBLIC_SITE_HOST ?? "gudvote.site";
 
 /** Halaman QR Code untuk ditampilkan di layar lokasi. Memuat satu layar penuh tanpa scroll. */
 export default async function Qr() {
-  const url = `https://${SITE_HOST}/e-vote`;
+  const url = `https://${SITE_HOST}`;
   const [svg, s] = await Promise.all([
     QRCode.toString(url, { type: "svg", margin: 0, errorCorrectionLevel: "M", color: { dark: "#1b0f1e", light: "#ffffff" } }),
     getSettings(),
@@ -35,9 +35,9 @@ export default async function Qr() {
           <span className="chip">E-Vote</span>
           <h1 className="d">Pindai Untuk <span className="mk">Memilih</span></h1>
           <p>Arahkan kamera ponsel ke QR Code, lalu ikuti petunjuk di layar.</p>
-          <p className="qr-url">{SITE_HOST}/e-vote</p>
+          <p className="qr-url">{SITE_HOST}</p>
         </div>
-        <div className="qr-card" role="img" aria-label={`QR Code menuju ${SITE_HOST}/e-vote`} dangerouslySetInnerHTML={{ __html: svg }} />
+        <div className="qr-card" role="img" aria-label={`QR Code menuju ${SITE_HOST}`} dangerouslySetInnerHTML={{ __html: svg }} />
       </main>
     </div>
   );
