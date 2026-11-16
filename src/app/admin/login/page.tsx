@@ -19,14 +19,14 @@ export default async function AdminLogin() {
     <main style={{ padding: "0 16px" }}>
       <div className="login-card">
         <Image src="/logo-gud.png" alt="Logo Girl Up Diponegoro" width={84} height={100} />
-        <h1 className="d lc" style={{ fontSize: 44, margin: "18px 0 8px" }}>panel <span className="mk">panitia.</span></h1>
+        <h1 className="d" style={{ fontSize: 44, margin: "18px 0 8px" }}>Panel <span className="mk">Panitia</span></h1>
         <p className="muted" style={{ margin: "0 0 20px" }}>Khusus panitia pemilihan. Pemilih tidak perlu masuk.</p>
 
         <LoginForm />
 
         {dev && (
           <form action={devLogin} style={{ marginTop: 22, paddingTop: 18, borderTop: "1.5px dashed var(--ink-3)" }}>
-            <div className="chip chip-warn" style={{ marginBottom: 10 }}>mode pengembangan</div>
+            <div className="chip chip-warn" style={{ marginBottom: 10 }}>Mode Pengembangan</div>
             <div className="field">
               <label htmlFor="admin">Masuk sebagai</label>
               <Select id="admin" name="admin" options={admins.map((a) => ({ value: a.id, label: a.email }))} />

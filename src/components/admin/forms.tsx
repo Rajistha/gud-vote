@@ -20,7 +20,7 @@ function ErrorLine({ r }: { r: Result }) {
 const FIELDSET = { border: 0, padding: 0, margin: 0, minWidth: 0 } as const;
 
 type CandidateValues = {
-  id?: string; number?: number; president_name?: string; vice_name?: string; tagline?: string | null;
+  id?: string; number?: number; president_name?: string; vice_name?: string;
   president_info?: string | null; vice_info?: string | null; photo_url?: string | null; vision?: string | null;
   mission?: string | null; programs?: string | null; video_url?: string | null;
 };
@@ -36,12 +36,11 @@ export function CandidateForm({ c, nextNumber, locked }: { c?: CandidateValues; 
         <div className="formgrid">
           <div className="field full"><ImageUploader current={c?.photo_url} disabled={locked} /></div>
           <div className="field"><label htmlFor="number">Nomor urut</label><input id="number" name="number" type="number" min={1} max={99} className="input" defaultValue={c?.number ?? nextNumber} /></div>
-          <div className="field"><label htmlFor="tagline">Tagline</label><input id="tagline" name="tagline" className="input" defaultValue={c?.tagline ?? ""} placeholder="Ruang aman, suara berdaya" /></div>
           <div className="field"><label htmlFor="president_name">Calon presiden</label><input id="president_name" name="president_name" className="input" defaultValue={c?.president_name ?? ""} /></div>
           <div className="field"><label htmlFor="vice_name">Calon wakil presiden</label><input id="vice_name" name="vice_name" className="input" defaultValue={c?.vice_name ?? ""} /></div>
           <div className="field"><label htmlFor="president_info">Fakultas/angkatan presiden</label><input id="president_info" name="president_info" className="input" defaultValue={c?.president_info ?? ""} placeholder="Teknik Industri '24" /></div>
           <div className="field"><label htmlFor="vice_info">Fakultas/angkatan wakil</label><input id="vice_info" name="vice_info" className="input" defaultValue={c?.vice_info ?? ""} placeholder="Hukum '24" /></div>
-          <div className="field full"><label htmlFor="video_url">Tautan video <InfoTip text="Video ditampilkan di halaman profil pasangan calon." /></label><input id="video_url" name="video_url" type="url" className="input" defaultValue={c?.video_url ?? ""} placeholder="https://…" /></div>
+          <div className="field full"><label htmlFor="video_url">Tautan video <InfoTip text="Video ditampilkan di halaman profil Pasangan Calon." /></label><input id="video_url" name="video_url" type="url" className="input" defaultValue={c?.video_url ?? ""} placeholder="https://…" /></div>
           <div className="field full"><label htmlFor="vision">Visi</label><textarea id="vision" name="vision" className="input" defaultValue={c?.vision ?? ""} /></div>
           <div className="field"><label htmlFor="mission">Misi <InfoTip text="Satu baris = satu poin bernomor di landing page." /></label><textarea id="mission" name="mission" className="input" style={{ minHeight: 140 }} defaultValue={c?.mission ?? ""} /></div>
           <div className="field"><label htmlFor="programs">Program unggulan <InfoTip text="Satu baris = satu poin bernomor di landing page." /></label><textarea id="programs" name="programs" className="input" style={{ minHeight: 140 }} defaultValue={c?.programs ?? ""} /></div>
@@ -70,7 +69,7 @@ export function SettingsForm({ v, locked }: { v: SettingsValues; locked: boolean
       <fieldset disabled={locked} style={FIELDSET}>
         <div className="formgrid">
           <div className="field full"><label htmlFor="title">Judul pemilihan</label><input id="title" name="title" className="input" defaultValue={v.title} /></div>
-          <div className="field"><label htmlFor="opens_at">Dibuka <InfoTip text="Sebelum waktu ini, bilik suara menampilkan hitung mundur." /></label><DateTimePicker id="opens_at" name="opens_at" defaultValue={v.opens_at} disabled={locked} /></div>
+          <div className="field"><label htmlFor="opens_at">Dibuka <InfoTip text="Sebelum waktu ini, halaman E-Vote menampilkan hitung mundur." /></label><DateTimePicker id="opens_at" name="opens_at" defaultValue={v.opens_at} disabled={locked} /></div>
           <div className="field"><label htmlFor="closes_at">Ditutup <InfoTip text="Setelah waktu ini, suara tidak lagi diterima." /></label><DateTimePicker id="closes_at" name="closes_at" defaultValue={v.closes_at} disabled={locked} /></div>
           <div className="field full"><label htmlFor="eligible_total">Jumlah anggota hak pilih <InfoTip text="Dipakai untuk menghitung persentase partisipasi." /></label><input id="eligible_total" name="eligible_total" type="number" min={0} className="input" defaultValue={v.eligible_total ?? ""} /></div>
         </div>

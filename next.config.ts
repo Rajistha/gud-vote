@@ -39,6 +39,10 @@ const nextConfig: NextConfig = {
   poweredByHeader: false,
   // Unggah foto paslon lewat server action (foto sudah dikecilkan di browser).
   experimental: { serverActions: { bodySizeLimit: "4mb" } },
+  // Alamat lama (QR Code atau tautan yang sudah dibagikan) tetap diarahkan ke halaman E-Vote.
+  async redirects() {
+    return [{ source: "/bilik", destination: "/e-vote", permanent: true }];
+  },
   async headers() {
     return [{ source: "/(.*)", headers: securityHeaders }];
   },

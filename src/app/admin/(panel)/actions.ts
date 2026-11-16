@@ -53,21 +53,21 @@ export async function saveCandidate(_prev: Result, fd: FormData): Promise<Result
   }
 
   const values = [
-    number, president, vice, opt(fd, "tagline"), opt(fd, "president_info"), opt(fd, "vice_info"),
+    number, president, vice, opt(fd, "president_info"), opt(fd, "vice_info"),
     photo, opt(fd, "vision"), opt(fd, "mission"), opt(fd, "programs"), video,
   ];
   try {
     if (id) {
       await query(
-        `UPDATE candidates SET number=$1, president_name=$2, vice_name=$3, tagline=$4, president_info=$5, vice_info=$6,
-                photo_url=$7, vision=$8, mission=$9, programs=$10, video_url=$11 WHERE id=$12`,
+        `UPDATE candidates SET number=$1, president_name=$2, vice_name=$3, president_info=$4, vice_info=$5,
+                photo_url=$6, vision=$7, mission=$8, programs=$9, video_url=$10 WHERE id=$11`,
         [...values, id],
       );
       await audit(admin.id, "UPDATE_CANDIDATE", { number });
     } else {
       await query(
-        `INSERT INTO candidates (number, president_name, vice_name, tagline, president_info, vice_info, photo_url, vision, mission, programs, video_url)
-         VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)`,
+        `INSERT INTO candidates (number, president_name, vice_name, president_info, vice_info, photo_url, vision, mission, programs, video_url)
+         VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)`,
         values,
       );
       await audit(admin.id, "CREATE_CANDIDATE", { number });

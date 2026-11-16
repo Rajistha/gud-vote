@@ -11,21 +11,21 @@ const SITE_URL = `https://${process.env.NEXT_PUBLIC_SITE_HOST ?? "gudvote.site"}
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
-  title: "GUD Vote · Regenerasi Girl Up Diponegoro",
-  description: "Rooted In Care, Equality Everywhere. E-voting Regenerasi Girl Up Diponegoro.",
+  title: "GUD Vote · Regenerasi Girl Up Diponegoro 2027",
+  description: "Rooted In Care, Equality Everywhere. E-voting Regenerasi Girl Up Diponegoro 2027.",
   openGraph: {
     type: "website",
     siteName: "GUD Vote",
     locale: "id_ID",
-    title: "GUD Vote · Regenerasi Girl Up Diponegoro",
+    title: "GUD Vote · Regenerasi Girl Up Diponegoro 2027",
     description: "Rooted In Care, Equality Everywhere.",
     url: "/",
   },
-  twitter: { card: "summary_large_image", title: "GUD Vote · Regenerasi Girl Up Diponegoro", description: "Rooted In Care, Equality Everywhere." },
+  twitter: { card: "summary_large_image", title: "GUD Vote · Regenerasi Girl Up Diponegoro 2027", description: "Rooted In Care, Equality Everywhere." },
   robots: { index: false, follow: false },
 };
 
-export const viewport: Viewport = { themeColor: "#ffd3e5" };
+export const viewport: Viewport = { themeColor: "#ffd3e5", viewportFit: "cover" };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (

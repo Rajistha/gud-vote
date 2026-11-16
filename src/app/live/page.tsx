@@ -4,7 +4,7 @@ import { LiveBoard } from "@/components/live/LiveBoard";
 
 export const dynamic = "force-dynamic";
 export const metadata: Metadata = {
-  title: "Live count · Regenerasi Girl Up Diponegoro",
+  title: "Live count · Regenerasi Girl Up Diponegoro 2027",
   robots: { index: false, follow: false },
 };
 

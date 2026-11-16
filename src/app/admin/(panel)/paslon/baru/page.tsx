@@ -11,7 +11,7 @@ export default async function NewCandidate() {
   const max = await queryOne<{ n: number | null }>("SELECT MAX(number) AS n FROM candidates");
   return (
     <>
-      <div className="main-h"><h1 className="d lc">tambah <span className="mk">paslon</span></h1></div>
+      <div className="main-h"><h1 className="d">Tambah <span className="mk">Paslon</span></h1></div>
       <CandidateForm nextNumber={(max?.n ?? 0) + 1} locked={phaseOf(s) === "open"} />
     </>
   );

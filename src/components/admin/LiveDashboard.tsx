@@ -55,7 +55,7 @@ export function LiveDashboard({ initial }: { initial: LiveData }) {
         <div className="panel-h">
           <b>Live count</b>
           <Tooltip text="Setiap kali dashboard dibuka, aksesnya dicatat di audit log." side="bottom">
-            <span className="chip chip-warn" tabIndex={0}>akses tercatat</span>
+            <span className="chip chip-warn" tabIndex={0}>Akses Tercatat</span>
           </Tooltip>
           <div className="sp" />
           {stale && <small role="status">koneksi terputus, mencoba lagi…</small>}
@@ -72,7 +72,7 @@ export function LiveDashboard({ initial }: { initial: LiveData }) {
               ))}
               {(d.blank ?? 0) > 0 && (
                 <div className="hb pc0">
-                  <div className="who"><span className="num">–</span><div><b>Kotak kosong</b></div></div>
+                  <div className="who"><span className="num">–</span><div><b>Kotak Kosong</b></div></div>
                   <div className="track"><i style={{ width: `${((d.blank ?? 0) / maxVotes) * 100}%` }} /></div>
                   <div className="val"><b>{d.blank}</b><span>{fmtPct(d.blank ?? 0, totalVotes)}</span></div>
                 </div>

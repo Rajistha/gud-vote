@@ -5,7 +5,6 @@ CREATE TABLE IF NOT EXISTS candidates (
   number          int  NOT NULL UNIQUE,
   president_name  text NOT NULL,
   vice_name       text NOT NULL,
-  tagline         text,
   president_info  text,
   vice_info       text,
   photo_url       text,
@@ -33,6 +32,7 @@ CREATE TABLE IF NOT EXISTS admins (
 
 -- Hanya ada satu peran (semua panitia setara). Untuk database lama yang masih punya kolom role.
 ALTER TABLE admins DROP COLUMN IF EXISTS role;
+ALTER TABLE candidates DROP COLUMN IF EXISTS tagline;
 
 -- Hitungan kehadiran: satu ketukan = satu baris. Koreksi = baris baru delta -1
 CREATE TABLE IF NOT EXISTS check_ins (

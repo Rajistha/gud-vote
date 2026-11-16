@@ -23,7 +23,7 @@ export async function enterVenueCode(_prev: FormState, formData: FormData): Prom
   (await cookies()).set(VENUE_COOKIE, s.venue_code_hash, {
     httpOnly: true, sameSite: "lax", secure: process.env.NODE_ENV === "production", path: "/", maxAge: 60 * 60 * 8,
   });
-  redirect("/bilik");
+  redirect("/e-vote");
 }
 
 export async function castVote(_prev: FormState, formData: FormData): Promise<FormState> {
@@ -31,12 +31,12 @@ export async function castVote(_prev: FormState, formData: FormData): Promise<Fo
   if (!rateLimit(`vote:${ip}`, 30, 60_000)) return { error: "Terlalu banyak percobaan. Silakan coba beberapa saat lagi." };
 
   const s = await getSettings();
-  if (phaseOf(s) !== "open") redirect("/bilik");
-  if (!(await venueOk(s))) redirect("/bilik");
+  if (phaseOf(s) !== "open") redirect("/e-vote");
+  if (!(await venueOk(s))) redirect("/e-vote");
 
   const choice = String(formData.get("choice") ?? "");
   const blank = choice === "blank";
-  if (!blank && !UUID.test(choice)) return { error: "Silakan pilih satu pasangan calon." };
+  if (!blank && !UUID.test(choice)) return { error: "Silakan pilih satu Pasangan Calon." };
 
   const jar = await cookies();
   let deviceToken = jar.get(DEVICE_COOKIE)?.value ?? null;
@@ -54,10 +54,10 @@ export async function castVote(_prev: FormState, formData: FormData): Promise<Fo
   }
 
   if (failure) {
-    if (failure.includes("VOTING_NOT_OPEN")) redirect("/bilik");
-    if (failure.includes("ALREADY_VOTED_ON_DEVICE")) redirect("/bilik");
-    if (failure.includes("BLANK_NOT_ALLOWED")) return { error: "Kotak kosong tidak tersedia." };
-    if (failure.includes("INVALID_CANDIDATE")) return { error: "Pasangan calon tidak ditemukan. Silakan muat ulang halaman." };
+    if (failure.includes("VOTING_NOT_OPEN")) redirect("/e-vote");
+    if (failure.includes("ALREADY_VOTED_ON_DEVICE")) redirect("/e-vote");
+    if (failure.includes("BLANK_NOT_ALLOWED")) return { error: "Kotak Kosong tidak tersedia." };
+    if (failure.includes("INVALID_CANDIDATE")) return { error: "Pasangan Calon tidak ditemukan. Silakan muat ulang halaman." };
     console.error("cast_vote gagal:", failure);
     return { error: "Suara belum terkirim. Silakan coba lagi atau hubungi panitia." };
   }

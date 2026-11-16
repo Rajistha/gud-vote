@@ -7,9 +7,9 @@ import { PublicLiveControl } from "@/components/admin/PublicLiveControl";
 export const dynamic = "force-dynamic";
 
 const PHASE = {
-  upcoming: { cls: "chip-soon", label: "belum dibuka" },
-  open: { cls: "chip-live", label: "berlangsung" },
-  closed: { cls: "chip-closed", label: "ditutup" },
+  upcoming: { cls: "chip-soon", label: "Belum Dibuka" },
+  open: { cls: "chip-live", label: "Berlangsung" },
+  closed: { cls: "chip-closed", label: "Ditutup" },
 } as const;
 
 export default async function Dashboard() {
@@ -34,10 +34,10 @@ export default async function Dashboard() {
       <div className="main-h">
         <div>
           <small className="muted">{fmtDate(new Date())}</small>
-          <h1 className="d lc">halo, <span className="mk">{(admin.name ?? admin.email).split(/[@\s]/)[0].toLowerCase()}</span></h1>
+          <h1 className="d">Halo, <span className="mk">{(admin.name ?? admin.email).split(/[@\s]/)[0].replace(/^./, (c) => c.toUpperCase())}</span></h1>
         </div>
         <div className="sp" />
-        <span className={`chip ${PHASE[phase].cls}`}><span className="dot" />{PHASE[phase].label}{s.closes_at && phase === "open" ? ` · tutup ${fmtTime(s.closes_at)}` : ""}</span>
+        <span className={`chip ${PHASE[phase].cls}`}><span className="dot" />{PHASE[phase].label}{s.closes_at && phase === "open" ? ` · Tutup ${fmtTime(s.closes_at)}` : ""}</span>
       </div>
       <PublicLiveControl initial={s.public_live} />
       <LiveDashboard initial={initial} />

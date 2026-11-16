@@ -24,7 +24,7 @@ export default async function PanelLayout({ children }: { children: React.ReactN
     <div className="adm">
       <aside className="side">
         <div className="brand">
-          <Image src="/girlup-mark.png" alt="" width={34} height={34} />
+          <Image src="/logo-gud.png" alt="Logo Girl Up Diponegoro" width={38} height={46} />
           <div><b>GUD Vote</b><small>Panel Panitia</small></div>
         </div>
         <AdminNav items={items} />

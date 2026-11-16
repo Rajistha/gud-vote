@@ -15,7 +15,7 @@ export default async function Jadwal() {
 
   return (
     <>
-      <div className="main-h"><h1 className="d lc">jadwal <span className="mk">pemilihan</span></h1></div>
+      <div className="main-h"><h1 className="d">Jadwal <span className="mk">Pemilihan</span></h1></div>
       <div className="panel">
         <div className="timeline">
           {STEPS.map((label, i) => (

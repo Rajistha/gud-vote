@@ -17,7 +17,7 @@ export default async function EditCandidate(props: PageProps<"/admin/paslon/[id]
   const s = await getSettings();
   return (
     <>
-      <div className="main-h"><h1 className="d lc">edit <span className="mk">paslon {c.number}</span></h1></div>
+      <div className="main-h"><h1 className="d">Edit <span className="mk">Paslon {c.number}</span></h1></div>
       <CandidateForm c={c} nextNumber={c.number} locked={phaseOf(s) === "open"} />
     </>
   );

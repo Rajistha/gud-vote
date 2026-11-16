@@ -1,6 +1,6 @@
 # GUD Vote
 
-Sistem e-voting Regenerasi Girl Up Diponegoro. *Rooted In Care, Equality Everywhere.*
+Sistem e-voting Regenerasi Girl Up Diponegoro 2027. *Rooted In Care, Equality Everywhere.*
 
 Stack: Next.js 16, TypeScript, Tailwind CSS 4, PostgreSQL dan Authentication (Supabase).
 
@@ -24,8 +24,8 @@ dicocokkan dengan jumlah pemilih yang hadir. Panitia mengelola pemilihan lewat p
 
 | Alamat | Isi |
 |---|---|
-| `/` | Landing page publik: paslon beserta visi, misi, program, video, perbandingan, dan cara memilih |
-| `/bilik` | Sebelum jadwal: hitung mundur. Saat voting: surat suara. Setelah tutup: layar ditutup |
+| `/` | Landing page publik: paslon beserta visi, misi, program, video, komparasi, dan cara memilih |
+| `/e-vote` | Sebelum jadwal: hitung mundur. Saat voting: surat suara. Setelah tutup: layar ditutup |
 | `/selesai` | Konfirmasi suara tercatat, kembali ke beranda otomatis dalam 10 detik |
 | `/live` | Perolehan suara langsung untuk ditampilkan di layar. Diaktifkan panitia dari dashboard |
 
@@ -34,8 +34,8 @@ dicocokkan dengan jumlah pemilih yang hadir. Panitia mengelola pemilihan lewat p
 | Menu | Fungsi |
 |---|---|
 | Dashboard | Ringkasan suara langsung dan pengaturan tampilan hitung suara publik |
-| Paslon | Data pasangan calon, visi, misi, program, video, dan unggah foto |
-| Jadwal | Waktu buka dan tutup, kotak kosong, kode bilik, buka kembali, perpanjang, tutup darurat |
+| Paslon | Data Pasangan Calon, visi, misi, program, video, dan unggah foto |
+| Jadwal | Waktu buka dan tutup, kotak kosong, kode lokasi, buka kembali, perpanjang, tutup darurat |
 | Rekap | Hasil suara dan ekspor ke Excel |
 | Berita acara | Pencocokan jumlah suara dengan kehadiran, lalu hasil dikunci |
 | Panitia | Daftar akun panitia |
@@ -109,7 +109,7 @@ Tanpa kunci itu, foto lokal disimpan di `public/uploads/` hanya saat pengembanga
 ## Alur hari pemilihan
 
 1. Panitia mengatur jadwal dan kotak kosong di **Jadwal**, lalu mengaktifkan hitung suara publik bila perlu.
-2. Pemilih diverifikasi di lokasi, lalu memilih di `/bilik`.
+2. Pemilih diverifikasi di lokasi, lalu memilih di `/e-vote`.
 3. Voting ditutup otomatis sesuai jadwal. Selama hasil belum dikunci, voting bisa dibuka kembali atau diperpanjang.
 4. Di **Berita acara**, jumlah suara dicocokkan dengan kehadiran, lalu hasil dikunci.
 5. Hasil diunduh dari **Rekap** dalam format Excel.

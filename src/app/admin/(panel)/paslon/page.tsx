@@ -28,11 +28,11 @@ export default async function PaslonList(props: PageProps<"/admin/paslon">) {
     <>
       {flash && <FlashToast key={String(sp.msg)} kind={flash[0]} message={flash[1]} />}
       <div className="main-h">
-        <h1 className="d lc">pasangan <span className="mk">calon</span></h1>
+        <h1 className="d">Pasangan <span className="mk">Calon</span></h1>
         <div className="sp" />
         {locked && (
           <Tooltip text="Data paslon tidak bisa diubah atau dihapus selama voting berlangsung." side="bottom">
-            <span className="chip chip-warn">terkunci selama voting</span>
+            <span className="chip chip-warn">Terkunci Selama Voting</span>
           </Tooltip>
         )}
       </div>

@@ -32,7 +32,7 @@ async function copyLocal() {
   try {
     rows = (
       await local.query(
-        `SELECT number, president_name, vice_name, tagline, president_info, vice_info, photo_url, vision, mission, programs, video_url
+        `SELECT number, president_name, vice_name, president_info, vice_info, photo_url, vision, mission, programs, video_url
            FROM candidates ORDER BY number`,
       )
     ).rows;
@@ -56,12 +56,12 @@ async function copyLocal() {
     // Foto yang tersimpan di folder lokal tidak ada di server online; unggah ulang dari halaman Paslon.
     const photo = r.photo_url && /^https?:\/\//.test(r.photo_url) ? r.photo_url : null;
     await pool.query(
-      `INSERT INTO candidates (number, president_name, vice_name, tagline, president_info, vice_info, photo_url, vision, mission, programs, video_url)
-       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)
-       ON CONFLICT (number) DO UPDATE SET president_name=EXCLUDED.president_name, vice_name=EXCLUDED.vice_name, tagline=EXCLUDED.tagline,
+      `INSERT INTO candidates (number, president_name, vice_name, president_info, vice_info, photo_url, vision, mission, programs, video_url)
+       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)
+       ON CONFLICT (number) DO UPDATE SET president_name=EXCLUDED.president_name, vice_name=EXCLUDED.vice_name,
          president_info=EXCLUDED.president_info, vice_info=EXCLUDED.vice_info, photo_url=EXCLUDED.photo_url, vision=EXCLUDED.vision,
          mission=EXCLUDED.mission, programs=EXCLUDED.programs, video_url=EXCLUDED.video_url`,
-      [r.number, r.president_name, r.vice_name, r.tagline, r.president_info, r.vice_info, photo, r.vision, r.mission, r.programs, r.video_url],
+      [r.number, r.president_name, r.vice_name, r.president_info, r.vice_info, photo, r.vision, r.mission, r.programs, r.video_url],
     );
     console.log(`  paslon ${r.number}: ${r.president_name} & ${r.vice_name}`);
   }
@@ -125,7 +125,7 @@ async function seed() {
   }
   await pool.query(
     `INSERT INTO election_settings (id, title)
-     VALUES (1, 'Regenerasi Girl Up Diponegoro')
+     VALUES (1, 'Regenerasi Girl Up Diponegoro 2027')
      ON CONFLICT (id) DO NOTHING`,
   );
   console.log(`Pengaturan awal siap. Admin: ${emails.join(", ") || "(kosong, isi ADMIN_EMAILS)"}`);
@@ -142,22 +142,22 @@ async function seedDemo() {
   const { rows } = await pool.query("SELECT count(*)::int AS n FROM candidates");
   if (rows[0].n === 0) {
     const demo = [
-      [1, "Nadia Kirana", "Salsabila Putri", "Ruang aman, suara berdaya", "Teknik Industri '24", "Hukum '24",
+      [1, "Nadia Kirana", "Salsabila Putri", "Teknik Industri '24", "Hukum '24",
         "Menjadikan Girl Up Diponegoro ruang aman bagi setiap perempuan untuk bersuara dan bertumbuh.",
         "Membangun kanal aduan dan pendampingan yang aman.\nMenghadirkan layanan konseling sebaya.\nMemperkuat kolaborasi dengan layanan kampus.",
         "Safe Space Circle bulanan\nKelas kesehatan mental"],
-      [2, "Raisa Anindya", "Dinda Maharani", "Bergerak bersama, berdampak", "Psikologi '24", "Kesmas '24",
+      [2, "Raisa Anindya", "Dinda Maharani", "Psikologi '24", "Kesmas '24",
         "Menjadikan Girl Up Diponegoro rumah yang aman dan inklusif bagi setiap perempuan untuk tumbuh, memimpin, dan berdampak.",
         "Memperluas kelas kepemimpinan perempuan lintas fakultas.\nMembangun kanal aduan dan pendampingan yang aman.\nKolaborasi advokasi dengan komunitas di Semarang.",
         "GUD Leadership Academy\nAdvokasi bersama komunitas"],
-      [3, "Alya Ramadhani", "Tiara Kusuma", "Setara, berani, berkarya", "Ilmu Komunikasi '24", "FEB '24",
+      [3, "Alya Ramadhani", "Tiara Kusuma", "Ilmu Komunikasi '24", "FEB '24",
         "Menjadikan Girl Up Diponegoro wadah kreatif yang menyuarakan kesetaraan lewat karya.",
         "Mengembangkan kampanye digital yang konsisten.\nMembuka ruang karya anggota.\nKolaborasi dengan media dan kreator.",
         "Her Story Content Lab\nPekan karya anggota"],
     ];
     for (const d of demo) {
       await pool.query(
-        `INSERT INTO candidates (number, president_name, vice_name, tagline, president_info, vice_info, vision, mission, programs)
+        `INSERT INTO candidates (number, president_name, vice_name, president_info, vice_info, vision, mission, programs)
          VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9)`,
         d,
       );

@@ -17,7 +17,7 @@ export function BallotForm({ candidates, allowBlank }: { candidates: BallotCandi
   const sheet = useRef<HTMLDivElement>(null);
   useFocusTrap(sheet, open, ".btn-g");
   const picked = choice === "blank" ? null : candidates.find((c) => c.id === choice);
-  const label = choice === "blank" ? "Kotak kosong" : picked ? `Paslon 0${picked.number}` : null;
+  const label = choice === "blank" ? "Kotak Kosong" : picked ? `Paslon 0${picked.number}` : null;
 
   useEffect(() => {
     if (!open) return;
@@ -30,7 +30,7 @@ export function BallotForm({ candidates, allowBlank }: { candidates: BallotCandi
     <form action={action} style={{ display: "contents" }}>
       <input type="hidden" name="choice" value={choice ?? ""} />
 
-      <div role="radiogroup" aria-label="Pilih pasangan calon" className="opt-grid">
+      <div role="radiogroup" aria-label="Pilih Pasangan Calon" className="opt-grid">
         {candidates.map((c) => (
           <button
             key={c.id}
@@ -41,14 +41,14 @@ export function BallotForm({ candidates, allowBlank }: { candidates: BallotCandi
             onClick={() => setChoice(c.id)}
           >
             <div className="nb">{c.number}</div>
-            <div className="meta"><b>{c.name}</b><span>paslon {String(c.number).padStart(2, "0")}</span></div>
+            <div className="meta"><b>{c.name}</b><span>Paslon {String(c.number).padStart(2, "0")}</span></div>
             <div className="tick"><span className="radio" /></div>
           </button>
         ))}
         {allowBlank && (
           <button type="button" role="radio" aria-checked={choice === "blank"} className="opt blank pc0" onClick={() => setChoice("blank")}>
             <div className="nb">–</div>
-            <div className="meta"><b>Kotak kosong</b><span>tidak memilih pasangan calon mana pun</span></div>
+            <div className="meta"><b>Kotak Kosong</b><span>tidak memilih Pasangan Calon mana pun</span></div>
             <div className="tick"><span className="radio" /></div>
           </button>
         )}
@@ -57,7 +57,7 @@ export function BallotForm({ candidates, allowBlank }: { candidates: BallotCandi
       <div className="dock">
         {!open && state?.error && <div className="err-msg" role="alert" style={{ margin: "0 0 10px" }}>{state.error}</div>}
         <button type="button" className="btn btn-p btn-block" disabled={!choice} onClick={() => setOpen(true)}>
-          {label ? `Pilih ${label.toLowerCase()}` : "Pilih satu pasangan calon"}
+          {label ? `Pilih ${label}` : "Pilih satu Pasangan Calon"}
         </button>
         <small>Suara Anda bersifat rahasia</small>
       </div>
@@ -66,12 +66,12 @@ export function BallotForm({ candidates, allowBlank }: { candidates: BallotCandi
         <div className="scrim" onClick={() => !pending && setOpen(false)}>
           <div className="sheet" ref={sheet} role="dialog" aria-modal="true" aria-labelledby="confirm-title" onClick={(e) => e.stopPropagation()}>
             <div className="grab" />
-            <h2 id="confirm-title">konfirmasi pilihan Anda</h2>
+            <h2 id="confirm-title">Konfirmasi Pilihan Anda</h2>
             <div className={`pick ${picked ? picked.theme : "pc0"}`}>
               <div className="nb">{picked ? picked.number : "–"}</div>
               <div className="t">
-                <small>{picked ? `paslon 0${picked.number}` : "kotak kosong"}</small>
-                <b>{picked ? picked.name : "Tidak memilih pasangan calon mana pun"}</b>
+                <small>{picked ? `Paslon 0${picked.number}` : "Kotak Kosong"}</small>
+                <b>{picked ? picked.name : "Tidak memilih Pasangan Calon mana pun"}</b>
               </div>
             </div>
             {state?.error && <div className="err-msg" role="alert" style={{ margin: "0 0 12px" }}>{state.error}</div>}

@@ -6,9 +6,9 @@ import { IconBack } from "@/components/icons";
 import { CountdownCard } from "./Clock";
 
 const TICKER =
-  "rooted in care ✱ equality everywhere ✱ rooted in care ✱ equality everywhere ✱ rooted in care ✱ equality everywhere ✱ rooted in care ✱ equality everywhere ✱";
+  "Rooted In Care, Equality Everywhere ✱ Rooted In Care, Equality Everywhere ✱ Rooted In Care, Equality Everywhere ✱ Rooted In Care, Equality Everywhere ✱ Rooted In Care, Equality Everywhere ✱ Rooted In Care, Equality Everywhere ✱";
 
-/** Bilik suara sebelum waktunya: hitung mundur. Berpindah ke surat suara otomatis saat nol. */
+/** Halaman E-Vote sebelum waktunya: hitung mundur. Berpindah ke surat suara otomatis saat nol. */
 export function CountdownScreen({ s }: { s: Settings }) {
   return (
     <div className="app">
@@ -19,7 +19,7 @@ export function CountdownScreen({ s }: { s: Settings }) {
         <div className="cd-grid">
           <div className="cd-left">
             <Image className="cd-logo" src="/logo-gud.png" alt="Logo Girl Up Diponegoro" width={150} height={180} priority />
-            <h1 className="d lc">bilik suara<br /><span className="mk">belum dibuka.</span></h1>
+            <h1 className="d">E-Vote<br /><span className="mk">Belum Dibuka</span></h1>
           </div>
           <div className="cd-right">
             {s.opens_at ? (
@@ -32,7 +32,7 @@ export function CountdownScreen({ s }: { s: Settings }) {
               <p className="cd-when muted">Jadwal pemilihan akan diumumkan panitia.</p>
             )}
             <div className="cd-actions">
-              <Link href="/#paslon" className="btn btn-g">Lihat profil pasangan calon</Link>
+              <Link href="/#paslon" className="btn btn-g">Kenali Pasangan Calon</Link>
             </div>
             <p className="cd-when muted" style={{ marginTop: 14, fontSize: 13 }}>Verifikasi pemilih dilakukan panitia di meja registrasi.</p>
           </div>
@@ -56,7 +56,7 @@ export async function ClosedScreen({ s }: { s: Settings }) {
         <div className="split">
           <div className="split-l">
             <Image src="/logo-gud.png" alt="Logo Girl Up Diponegoro" width={84} height={100} />
-            <h1 className="d lc">voting<br /><span className="mk">ditutup.</span></h1>
+            <h1 className="d">Voting<br /><span className="mk">Ditutup</span></h1>
             <p className="muted">
               {s.closes_at ? `Pemungutan suara berakhir ${fmtDate(s.closes_at)} pukul ${fmtTime(s.closes_at)}. ` : ""}
               Terima kasih atas partisipasi Anda.

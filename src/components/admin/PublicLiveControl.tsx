@@ -28,6 +28,7 @@ export function PublicLiveControl({ initial }: { initial: boolean }) {
         {pending ? "Menyimpan…" : on ? "Sembunyikan" : "Tampilkan ke publik"}
       </button>
       <a className="btn btn-g btn-sm" href="/live" target="_blank" rel="noopener noreferrer">Buka layar ↗</a>
+      <a className="btn btn-g btn-sm" href="/qr" target="_blank" rel="noopener noreferrer">Layar QR ↗</a>
     </div>
   );
 }

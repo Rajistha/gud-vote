@@ -180,7 +180,7 @@ export function LiveBoard({ initial }: { initial: LiveSnapshot }) {
       <div className="lv">
         {top}
         <main className="lv-wait">
-          <h1 className="d lc">live count <span className="mk">belum tampil.</span></h1>
+          <h1 className="d">Live Count <span className="mk">Belum Tampil</span></h1>
           <p>Perolehan suara akan ditampilkan di sini oleh panitia. Halaman ini diperbarui otomatis.</p>
         </main>
       </div>
@@ -208,7 +208,7 @@ export function LiveBoard({ initial }: { initial: LiveSnapshot }) {
       {top}
       <main className="lv-main">
         <div className="lv-head">
-          <h1 className="d lc">perolehan <span className="mk">suara.</span></h1>
+          <h1 className="d">Perolehan <span className="mk">Suara</span></h1>
           <p className="lv-sub">{sub}</p>
         </div>
 
@@ -240,7 +240,7 @@ export function LiveBoard({ initial }: { initial: LiveSnapshot }) {
             <li className="lv-row pc0">
               <div className="lv-num">–</div>
               <div className="lv-body">
-                <div className="lv-name">Kotak kosong</div>
+                <div className="lv-name">Kotak Kosong</div>
                 <div className="lv-track" aria-hidden="true">
                   <i style={{ width: `${pct(d.blank, d.votes)}%` }} />
                   <span className="lv-track-pct">{fmtPct(pct(d.blank, d.votes))}</span>
@@ -252,7 +252,7 @@ export function LiveBoard({ initial }: { initial: LiveSnapshot }) {
               </div>
             </li>
           )}
-          {d.candidates.length === 0 && <li className="lv-empty">Pasangan calon belum tersedia.</li>}
+          {d.candidates.length === 0 && <li className="lv-empty">Pasangan Calon belum tersedia.</li>}
         </ol>
       </main>
 

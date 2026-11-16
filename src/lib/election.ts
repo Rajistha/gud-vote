@@ -26,7 +26,6 @@ export type Candidate = {
   number: number;
   president_name: string;
   vice_name: string;
-  tagline: string | null;
   president_info: string | null;
   vice_info: string | null;
   photo_url: string | null;
@@ -37,7 +36,7 @@ export type Candidate = {
 };
 
 const DEFAULT_SETTINGS: Settings = {
-  title: "Regenerasi Girl Up Diponegoro",
+  title: "Regenerasi Girl Up Diponegoro 2027",
   opens_at: null,
   closes_at: null,
   status: "upcoming",
