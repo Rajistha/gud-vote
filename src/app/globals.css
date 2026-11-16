@@ -675,7 +675,7 @@ textarea.input { align-items: flex-start; min-height: 96px; resize: vertical; }
   /* kolom samping hanya 420px: foto di kiri, nomor di kanan, tidak saling menimpa */
   .lp-bignum { font-size: min(40vh, 250px); top: 40px; bottom: auto; right: 14px; }
   .lp-photo { height: 78%; }
-  .ph.lp-photo.empty { height: 70%; left: 32px; width: 58%; bottom: 32px; }
+  .ph.lp-photo.empty { left: 32px; width: calc(100% - 64px); height: min(440px, calc(100% - 270px)); bottom: 32px; }
   .lp-count { left: 32px; top: 24px; z-index: 2; }
   .lp-cand-body { padding: 72px 64px 96px; }
   .lp-cand-body { margin-inline: auto; }

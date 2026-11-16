@@ -7,9 +7,21 @@ const bricolage = Bricolage_Grotesque({ variable: "--font-bricolage", subsets: [
 const dmSans = DM_Sans({ variable: "--font-dm-sans", subsets: ["latin"] });
 const dmMono = DM_Mono({ variable: "--font-dm-mono", subsets: ["latin"], weight: ["400", "500"] });
 
+const SITE_URL = `https://${process.env.NEXT_PUBLIC_SITE_HOST ?? "gudvote.site"}`;
+
 export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
   title: "GUD Vote · Regenerasi Girl Up Diponegoro",
   description: "Rooted In Care, Equality Everywhere. E-voting Regenerasi Girl Up Diponegoro.",
+  openGraph: {
+    type: "website",
+    siteName: "GUD Vote",
+    locale: "id_ID",
+    title: "GUD Vote · Regenerasi Girl Up Diponegoro",
+    description: "Rooted In Care, Equality Everywhere.",
+    url: "/",
+  },
+  twitter: { card: "summary_large_image", title: "GUD Vote · Regenerasi Girl Up Diponegoro", description: "Rooted In Care, Equality Everywhere." },
   robots: { index: false, follow: false },
 };
 
