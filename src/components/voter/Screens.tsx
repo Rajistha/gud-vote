@@ -26,7 +26,7 @@ export function CountdownScreen({ s }: { s: Settings }) {
               <>
                 <p className="cd-lead">Dibuka dalam</p>
                 <CountdownCard target={s.opens_at.toISOString()} serverNow={new Date().toISOString()} />
-                <div className="cd-when">{fmtDate(s.opens_at)} <span>· {fmtTime(s.opens_at)}</span></div>
+                <div className="cd-when">{fmtDate(s.opens_at)}</div>
               </>
             ) : (
               <p className="cd-when muted">Jadwal pemilihan akan diumumkan panitia.</p>

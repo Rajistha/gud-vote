@@ -48,7 +48,7 @@ export function Hero({ s, phase }: { s: Settings; phase: Phase }) {
             <>
               <p className="lp-cap">E-Vote dibuka dalam</p>
               <CountdownCard target={s.opens_at.toISOString()} serverNow={now} />
-              <p className="lp-when">{fmtDate(s.opens_at)} <span>· {fmtTime(s.opens_at)}</span></p>
+              <p className="lp-when">{fmtDate(s.opens_at)}</p>
             </>
           )}
           {phase === "open" && s.closes_at && (
