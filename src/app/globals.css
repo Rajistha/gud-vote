@@ -1362,3 +1362,7 @@ html:has(.lv), body:has(.lv) { height: 100%; overflow: hidden; }
 @media (max-width: 360px) {
   .side .brand small { display: none; }
 }
+
+/* indikator gulir di bagian atas halaman */
+.scrollbar-top { position: fixed; top: 0; left: 0; right: 0; height: 4px; z-index: 60; pointer-events: none; }
+.scrollbar-top-i { height: 100%; transform: scaleX(0); transform-origin: left; background: linear-gradient(90deg, var(--magenta), var(--pink) 60%, var(--yellow)); border-bottom: 1px solid var(--ink); will-change: transform; }

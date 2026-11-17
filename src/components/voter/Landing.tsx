@@ -7,12 +7,14 @@ import { Photo } from "@/components/Photo";
 import { IconShield } from "@/components/icons";
 import { CountdownCard, TimeLeft } from "./Clock";
 import { Confetti } from "./Confetti";
+import { ScrollProgress } from "./ScrollProgress";
 
 const pad = (n: number) => String(n).padStart(2, "0");
 
 export function LpNav({ phase }: { phase: Phase }) {
   return (
     <header className="lp-nav">
+      <ScrollProgress />
       <div className="lp-wrap lp-nav-in">
         <Link href="/" className="lp-brand"><Image src="/logo-gud.png" alt="Logo Girl Up Diponegoro" width={38} height={46} priority />GUD Vote</Link>
         <nav className="lp-links" aria-label="Bagian halaman">
